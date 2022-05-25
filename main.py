@@ -15,7 +15,7 @@ def is_prime(n):
 
 class StrategyInterface(ABC):
     @abstractmethod
-    def execute():
+    def execute(self):
         print("Abstract method")
 
 class FiveEvenNumbersStrategy(StrategyInterface):
@@ -25,7 +25,8 @@ class FiveEvenNumbersStrategy(StrategyInterface):
     def execute(self):
         random.seed()
         number = random.randint(0, 100)
-        while (number not in self.numbers and number % 2 != 0 and len(self.numbers) != 5):
+        if (len(self.numbers) == 5): return -1
+        while (number in self.numbers or number % 2 != 0):
             number = self.numbers.append(random.randint(0, 100))
         self.numbers.append(number)
         return number
@@ -38,7 +39,8 @@ class FiveOddNumbersStrategy(StrategyInterface):
     def execute(self):
         random.seed()
         number = random.randint(0, 100)
-        while (number not in self.numbers and number % 2 == 0 and len(self.numbers) != 5):
+        if (len(self.numbers) == 5): return -1
+        while (number in self.numbers or number % 2 == 0):
             number = random.randint(0, 100)
         self.numbers.append(number)
         return number
@@ -64,7 +66,8 @@ class ThreeeNumbersMultipleTenStrategy(StrategyInterface):
     def execute(self):
         random.seed()
         number = random.randint(0, 100)
-        while (number not in self.numbers and number % 10 == 0 and len(self.numbers) != 3):
+        if (len(self.numbers) == 3): return -1
+        while (number in self.numbers or number % 10 != 0):
             number = random.randint(0, 100)
         self.numbers.append(number)
         return number
@@ -77,7 +80,8 @@ class TwoNumbersMultipleTwentyFiveStrategy(StrategyInterface):
     def execute(self):
         random.seed()
         number = random.randint(0, 100)
-        while (number not in self.numbers and number % 25 == 0 and len(self.numbers) != 2):
+        if (len(self.numbers) == 2): return -1
+        while (number in self.numbers or number % 25 != 0):
             number = random.randint(0, 100)
         self.numbers.append(number)
         return number
