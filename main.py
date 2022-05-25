@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import random
+from re import S
 
 
 def is_prime(n):
@@ -24,7 +25,7 @@ class FiveEvenNumbersStrategy(StrategyInterface):
     def execute(self):
         random.seed()
         number = random.randint(0, 100)
-        while (number in self.numbers and number % 2 != 0 and len(self.numbers) != 5):
+        while (number not in self.numbers and number % 2 != 0 and len(self.numbers) != 5):
             number = self.numbers.append(random.randint(0, 100))
         self.numbers.append(number)
         return number
@@ -37,7 +38,7 @@ class FiveOddNumbersStrategy(StrategyInterface):
     def execute(self):
         random.seed()
         number = random.randint(0, 100)
-        while (number in self.numbers and number % 2 == 0 and len(self.numbers) != 5):
+        while (number not in self.numbers and number % 2 == 0 and len(self.numbers) != 5):
             number = random.randint(0, 100)
         self.numbers.append(number)
         return number
@@ -63,7 +64,7 @@ class ThreeeNumbersMultipleTenStrategy(StrategyInterface):
     def execute(self):
         random.seed()
         number = random.randint(0, 100)
-        while (number in self.numbers and number % 10 != 0 and len(self.numbers) != 3):
+        while (number not in self.numbers and number % 10 == 0 and len(self.numbers) != 3):
             number = random.randint(0, 100)
         self.numbers.append(number)
         return number
@@ -76,30 +77,20 @@ class TwoNumbersMultipleTwentyFiveStrategy(StrategyInterface):
     def execute(self):
         random.seed()
         number = random.randint(0, 100)
-        while (number in self.numbers and number % 25 != 0 and len(self.numbers) != 2):
+        while (number not in self.numbers and number % 25 == 0 and len(self.numbers) != 2):
             number = random.randint(0, 100)
         self.numbers.append(number)
         return number
-
-
-class ListenerInterface(ABC):
+class PlayerInterface(ABC):
     @abstractmethod
-    def on_event(self, event):
-        pass
-
-
-class Listener(ListenerInterface):
-    def __init__(self, current_number):
-        self.current_number = current_number
-
-    def on_event(self, number):
-        self.current_number = number
+    def play(self):
+        print("Abstract method")
 
 class Player:
     def __init__(self):
         self.current_number = 0
-    def on_event(self, event):
-        self.current_number = event
+    def play(self, number):
+        self.current_number = number
 
 class Context:
     def __init__(self):
@@ -109,12 +100,13 @@ class Context:
     def do_something(self):
         number = self.strategy.execute()
         self.notify(number)
+        return number
 
     def set_strategy(self, strategy: StrategyInterface):
         self.strategy = strategy
 
-    def notify(self, event):
-        self.player.on_event(event)
+    def notify(self, number):
+        self.player.play(number)
 
     def set_player(self, player: Player):
         self.player=player 
@@ -129,13 +121,28 @@ class Game:
             cls._instances[cls] = instance
         return cls._instances[cls]
 
-    def add_player(self, player: Player, strategy: StrategyInterface):
+    def add_player(self,strategy: StrategyInterface):
         context = Context()
-        listener = Listener(0)
+        player = Player()
         context.set_strategy(strategy)
-        context.subscribe(listener)
-        self.players.append(Player(player, strategy))
-
+        context.set_player(player)
+        self._players.append(context)
+    
+    def start(self):
+        finished_players = []
+        # TODO: Testing
+        # max_number_of_times = 1000
+        # i = 0
+        # while (i < max_number_of_times):
+        #     status = 0
+        #     for i in range(len(self._players)):
+        #         if (i not in finished_players):
+        #             status = self._players[i].do_something()
+        #             if (status == 0):
+        #                 finished_players.append(i)
+        #             if (len(finished_players) == len(self._players)):
+        #                 break
+        #     i += 1
 
 if __name__ == "__main__":
     print("Examen Parcial")
@@ -145,3 +152,9 @@ if __name__ == "__main__":
     oneprimenumbersstrategy = OnePrimeNumberStrategy()
     threeenumbersmultipletenstrategy = ThreeeNumbersMultipleTenStrategy()
     twonumbersmultipletwentyfivestrategy = TwoNumbersMultipleTwentyFiveStrategy()
+    game.add_player(fiveevennumbersstrategy)
+    game.add_player(fiveoddnumbersstrategy)
+    game.add_player(oneprimenumbersstrategy)
+    game.add_player(threeenumbersmultipletenstrategy)
+    game.add_player(twonumbersmultipletwentyfivestrategy)
+    game.start()
