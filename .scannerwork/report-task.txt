@@ -1,7 +1,0 @@
-organization=alexanderutec
-projectKey=alexanderutec_ex1-soft
-serverUrl=https://sonarcloud.io
-serverVersion=8.0.0.29242
-dashboardUrl=https://sonarcloud.io/dashboard?id=alexanderutec_ex1-soft
-ceTaskId=AYD5IVoOrTjoJJb1DqEy
-ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AYD5IVoOrTjoJJb1DqEy

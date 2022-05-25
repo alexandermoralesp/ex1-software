@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 import random
 from re import S
 
-
 def is_prime(n):
     if n == 2:
         return True
